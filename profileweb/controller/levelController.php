@@ -1,0 +1,31 @@
+<?php
+include_once '../koneksi.php';
+include_once '../models/Level.php';
+include_once '../auth.php'; // ✅ tambahkan ini
+
+cekLogin(); // ✅ cek session, kalau belum login langsung redirect
+
+$obj = new Level();
+$proses = $_POST['proses'] ?? '';
+$nama = $_POST['nama'] ?? '';
+
+switch ($proses) {
+    case 'simpan':
+        $obj->simpan([$nama]);
+        break;
+    case 'ubah':
+        $id = $_POST['idx'] ?? '';
+        if (!empty($id)) {
+            $obj->ubah([$nama, $id]);
+        }
+        break;
+    case 'hapus':
+        $id = $_POST['id'] ?? '';
+        if (!empty($id)) {
+            $obj->hapus($id);
+        }
+        break;
+}
+
+header("Location: ../index.php?hal=level_list");
+exit;
